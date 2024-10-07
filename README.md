@@ -20,4 +20,4 @@ uuid - Used for generating unique IDs since there is no server accompanying this
 
 This project is deployed on GitHub Pages:
 
-- ADD LINK HERE
+- https://elliot-bachman.github.io/se_project_todo-app/
