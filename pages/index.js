@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-
 import { initialTodos, validationConfig } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
 import formValidator from "../components/FormValidator.js";
@@ -12,10 +11,18 @@ const todosList = document.querySelector(".todos__list");
 
 const openModal = (modal) => {
   modal.classList.add("popup_visible");
+  document.addEventListener("keydown", handleEscClose);
 };
 
 const closeModal = (modal) => {
   modal.classList.remove("popup_visible");
+  document.removeEventListener("keydown", handleEscClose);
+};
+
+const handleEscClose = (evt) => {
+  if (evt.key === "Escape") {
+    closeModal(addTodoPopup); // Close the popup when Esc is pressed
+  }
 };
 
 // The logic in this function should all be handled in the Todo class.
@@ -44,9 +51,11 @@ addTodoCloseBtn.addEventListener("click", () => {
 
 addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
+
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
 
+  // Create a date object and adjust for timezone
   const date = new Date(dateInput);
   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
@@ -54,7 +63,11 @@ addTodoForm.addEventListener("submit", (evt) => {
   const values = { name, date, id };
   const todo = generateTodo(values);
   todosList.append(todo);
+
   closeModal(addTodoPopup);
+
+  // Call resetValidation after successful submission
+  newTodoValidator.resetValidation();
 });
 
 initialTodos.forEach((item) => {

@@ -60,7 +60,6 @@ class Todo {
     this.generateCheckboxEl();
     this.generateDateEl(); // Implement the date display logic
 
-    // Add event listeners for checkbox and delete actions
     this._setEventListeners();
 
     return this._todoElement;

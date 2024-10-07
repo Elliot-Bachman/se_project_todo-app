@@ -73,6 +73,21 @@ class formValidator {
     });
     this._setEventListeners();
   }
+
+  // Add resetValidation method within the class
+  resetValidation() {
+    this._inputList.forEach((inputElement) => {
+      inputElement.value = "";
+      this._checkInputValidity(inputElement); // Clears validation errors if any
+    });
+
+    // Disable submit button initially
+    const buttonElement = this._formEl.querySelector(
+      this._submitButtonSelector
+    );
+    buttonElement.classList.add(this._inactiveButtonClass); // Fixed typo here (classList)
+    buttonElement.disabled = true;
+  }
 }
 
 export default formValidator;
