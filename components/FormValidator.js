@@ -1,6 +1,7 @@
 class formValidator {
   constructor(settings, formEl) {
     this._inputSelector = settings._inputSelector;
+    this._formSelector = settings._formSelector;
     this._submitButtonSelector = settings._submitButtonSelector;
     this._errorClass = settings.errorClass;
     this._inputErrorClass = settings.inputErrorClass;
@@ -8,7 +9,7 @@ class formValidator {
     this._formEl = formEl;
   }
 
-  // TODO IMPLEMENT ALL OTHER METHOSD
+  // TODO IMPLEMENT ALL OTHER METHODS
 
   _checkInputValidity(inputElement) {
     // (1) TODO - IMPLEMENT THIS METHOD
@@ -47,7 +48,7 @@ class formValidator {
     this._formEl.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
-    this._setEventListeners();
+    this._setEventListeners(this._formEl);
   }
 }
 

@@ -21,8 +21,17 @@ const closeModal = (modal) => {
 
 // The logic in this function should all be handled in the Todo class.
 const generateTodo = (data) => {
-  const todo = new Todo(data, "#todo-template"); // Correct class instantiation (uppercase T)
-  const todoElement = todo.getView(); // Fix the typo in getView
+  const todo = new Todo(
+    data,
+    "#todo-template",
+    (isChecked) => {
+      console.log(`Checkbox state changed: ${isChecked}`);
+    },
+    () => {
+      console.log("Delete button clicked");
+    }
+  );
+  const todoElement = todo.getView();
   return todoElement;
 };
 // TO BE REMOVED

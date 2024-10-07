@@ -1,50 +1,67 @@
 class Todo {
-  constructor(data, selector) {
+  constructor(data, selector, handleCheck, handleDelete, handleTotal) {
     this._data = data;
     this._templateElement = document.querySelector(selector);
+    this._handleCheck = handleCheck;
+    this._handleDelete = handleDelete;
+    this._handleTotal = handleTotal;
   }
 
   _setEventListeners() {
-    // TODO set up the delete button handler
-    //todoDeleteBtn.addEventListener("click", () => {
-    // todoElement.remove();
+    this._todoDeleteBtn.addEventListener("click", () => {
+      this._handleDelete(this._data.completed);
+      this._todoElement.remove();
+    });
+
     this._todoCheckboxEl.addEventListener("change", () => {
       this._data.completed = !this._data.completed;
+      this._handleCheck(this._data.completed);
     });
-    // when clicked, change completion from true to false, or vice versa.
   }
 
-  // Fix the typo here
   generateCheckboxEl() {
     this._todoCheckboxEl = this._todoElement.querySelector(".todo__completed");
     this._todoLabel = this._todoElement.querySelector(".todo__label");
     this._todoCheckboxEl.checked = this._data.completed;
-
     this._todoCheckboxEl.id = `todo-${this._data.id}`;
     this._todoLabel.setAttribute("for", `todo-${this._data.id}`);
+    this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
+  }
+
+  // Generate and display the date element
+  generateDateEl() {
+    this._todoDateEl = this._todoElement.querySelector(".todo__date");
+    const dueDate = new Date(this._data.date);
+    if (!isNaN(dueDate)) {
+      const formattedDate = dueDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+
+      // Set the formatted date in the date element
+      this._todoDateEl.textContent = `Due: ${formattedDate}`;
+    } else {
+      // If no date, display a default message
+      this._todoDateEl.textContent = "No due date set";
+    }
   }
 
   getView() {
+    // Clone the todo template and assign to _todoElement
     this._todoElement = this._templateElement.content
       .querySelector(".todo")
       .cloneNode(true);
 
+    // Set the name of the todo item
     const todoNameEl = this._todoElement.querySelector(".todo__name");
-    const todoDate = this._todoElement.querySelector(".todo__date");
-    const todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
-
     todoNameEl.textContent = this._data.name;
 
-    // TODO implement dates
-    //const dueDate = new Date(data.date);
-    //if (!isNaN(dueDate)) {
-    //todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
-    //year: "numeric",
-    //month: "short",
-    //day: "numeric", Make a separate class?
-    //})}`;
-
+    // Set up the checkbox and date elements
     this.generateCheckboxEl();
+    this.generateDateEl(); // Implement the date display logic
+
+    // Add event listeners for checkbox and delete actions
     this._setEventListeners();
 
     return this._todoElement;
