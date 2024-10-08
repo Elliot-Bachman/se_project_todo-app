@@ -7,6 +7,18 @@ class formValidator {
     this._inputErrorClass = settings.inputErrorClass;
     this._inactiveButtonClass = settings.inactiveButtonClass;
     this._formEl = formEl;
+
+    // Store the submit button as a class field
+    this._submitButton = this._formEl.querySelector(this._submitButtonSelector);
+  }
+
+  _hideError(inputElement) {
+    const errorElement = this._formEl.querySelector(
+      `#${inputElement.id}-error`
+    );
+    inputElement.classList.remove(this._inputErrorClass);
+    errorElement.classList.remove(this._errorClass);
+    errorElement.textContent = "";
   }
 
   _checkInputValidity(inputElement) {
@@ -19,9 +31,7 @@ class formValidator {
       errorElement.textContent = inputElement.validationMessage;
       errorElement.classList.add(this._errorClass);
     } else {
-      inputElement.classList.remove(this._inputErrorClass);
-      errorElement.classList.remove(this._errorClass);
-      errorElement.textContent = "";
+      this._hideError(inputElement);
     }
   }
 
@@ -30,16 +40,13 @@ class formValidator {
       (inputElement) => !inputElement.validity.valid
     );
 
-    const buttonElement = this._formEl.querySelector(
-      this._submitButtonSelector
-    );
-
+    // Use the class field for the submit button
     if (isFormInvalid) {
-      buttonElement.classList.add(this._inactiveButtonClass);
-      buttonElement.disabled = true;
+      this._submitButton.classList.add(this._inactiveButtonClass);
+      this._submitButton.disabled = true;
     } else {
-      buttonElement.classList.remove(this._inactiveButtonClass);
-      buttonElement.disabled = false;
+      this._submitButton.classList.remove(this._inactiveButtonClass);
+      this._submitButton.disabled = false;
     }
   }
 
@@ -65,13 +72,12 @@ class formValidator {
   }
 
   resetValidation() {
-    // Reset each input field's value
     this._inputList.forEach((inputElement) => {
       inputElement.value = "";
-      this._checkInputValidity(inputElement); // Clear validation errors if any
+      this._hideError(inputElement);
     });
 
-    // Call _toggleButtonState to disable the submit button and handle the state
+    // Use the class field for the submit button
     this._toggleButtonState();
   }
 }
