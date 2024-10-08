@@ -5,24 +5,27 @@ import formValidator from "../components/FormValidator.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = addTodoPopup.querySelector(".popup__form");
+const addTodoForm = document.forms["add-todo-form"]; // Improved form selection
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
 
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-  document.addEventListener("keydown", handleEscClose);
-};
-
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-  document.removeEventListener("keydown", handleEscClose);
-};
-
+// Function to handle closing the popup with the Escape key
 const handleEscClose = (evt) => {
   if (evt.key === "Escape") {
     closeModal(addTodoPopup); // Close the popup when Esc is pressed
   }
+};
+
+// Function to open the modal and add the keydown event listener
+const openModal = (modal) => {
+  modal.classList.add("popup_visible");
+  document.addEventListener("keydown", handleEscClose); // Add event listener for Escape key
+};
+
+// Function to close the modal and remove the keydown event listener
+const closeModal = (modal) => {
+  modal.classList.remove("popup_visible");
+  document.removeEventListener("keydown", handleEscClose); // Remove event listener for Escape key
 };
 
 // The logic in this function should all be handled in the Todo class.
@@ -41,14 +44,17 @@ const generateTodo = (data) => {
   return todoElement;
 };
 
+// event listener to open the "add todo" popup
 addTodoButton.addEventListener("click", () => {
   openModal(addTodoPopup);
 });
 
+// event listener to close the popup
 addTodoCloseBtn.addEventListener("click", () => {
   closeModal(addTodoPopup);
 });
 
+// event listener to handle form submission
 addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
 
@@ -61,19 +67,22 @@ addTodoForm.addEventListener("submit", (evt) => {
 
   const id = uuidv4();
   const values = { name, date, id };
+
   const todo = generateTodo(values);
   todosList.append(todo);
 
-  closeModal(addTodoPopup);
+  closeModal(addTodoPopup); // Close the modal after submission
 
   // Call resetValidation after successful submission
-  newTodoValidator.resetValidation();
+  newTodoValidator.resetValidation(); // Reset form validation after submission
 });
 
+// Render initial todos
 initialTodos.forEach((item) => {
   const todo = generateTodo(item);
   todosList.append(todo);
 });
 
+// Enable form validation
 const newTodoValidator = new formValidator(validationConfig, addTodoForm);
 newTodoValidator.enableValidation();
