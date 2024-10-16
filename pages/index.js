@@ -2,12 +2,25 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { initialTodos, validationConfig } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
 import formValidator from "../components/FormValidator.js";
+import Section from "../../components/Section.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = document.forms["add-todo-form"]; // Improved form selection
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
+
+// instantiation of Section class
+const todoSection = new Section({
+  items: [], // pass initial odos
+  renderer: () => {},
+  // generate todo item
+  // add it to the todo list
+  // Refer to the forEach loop in this file
+  containerSelector: ".todos__list",
+});
+
+// call section instance`s renderItems method
 
 // Function to handle closing the popup with the Escape key
 const handleEscClose = (evt) => {
@@ -69,7 +82,7 @@ addTodoForm.addEventListener("submit", (evt) => {
   const values = { name, date, id };
 
   const todo = generateTodo(values);
-  todosList.append(todo);
+  todosList.append(todo); // Use add item method
 
   closeModal(addTodoPopup); // Close the modal after submission
 
@@ -77,7 +90,7 @@ addTodoForm.addEventListener("submit", (evt) => {
   newTodoValidator.resetValidation(); // Reset form validation after submission
 });
 
-// Render initial todos
+// Render initial todos // Remove later Use add item method
 initialTodos.forEach((item) => {
   const todo = generateTodo(item);
   todosList.append(todo);
