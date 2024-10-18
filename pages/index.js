@@ -15,6 +15,15 @@ function handleCheck(completed) {
   todoCounter.updateCompleted(completed);
 }
 
+function handleDelete(completed) {
+  // Decrement total tasks and pass the completed status
+  todoCounter.updateTotal(false, completed); // Decrement total tasks and completed count if necessary
+}
+// If no tasks remain, reset the counters
+if (todoCounter._total === 0) {
+  todoCounter._completed = 0;
+}
+
 const addTodoPopup = new PopupWithForm({
   popupSelector: "#add-todo-popup",
   handleFormSubmit: (inputValues) => {
@@ -29,28 +38,32 @@ const addTodoPopup = new PopupWithForm({
     const id = uuidv4();
 
     // Create a new todo object
-    const newTodo = { name, date, id, completed: false };
+    const newTodo = { name, date, id, completed: false }; // New tasks are always incomplete
 
     // Generate a todo element using the Todo class
     const todoElement = generateTodo(newTodo);
 
     // Use Section's addItem method to add the new todo to the list
     todoSection.addItem(todoElement);
+
+    // Update the total number of tasks (increment counter)
+    todoCounter.updateTotal(true);
   },
 });
 
 addTodoPopup.setEventListeners();
 
-// The function to generate a todo element using the Todo class
 const generateTodo = (data) => {
   const todo = new Todo(
     data,
     "#todo-template",
     (isChecked) => {
       console.log(`Checkbox state changed: ${isChecked}`);
+      handleCheck(isChecked); // Call the checkbox handler
     },
-    () => {
+    (isDeleted) => {
       console.log("Delete button clicked");
+      handleDelete(isDeleted); // Call the delete handler
     }
   );
   return todo.getView(); // Return the generated todo element
