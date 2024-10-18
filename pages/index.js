@@ -3,45 +3,45 @@ import { initialTodos, validationConfig } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
 import formValidator from "../components/FormValidator.js";
 import Section from "../../components/Section.js";
+import PopupWithForm from "../../components/PopupWithForm.js";
+import TodoCounter from "../../components/TodoCounter.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
-const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = document.forms["add-todo-form"]; // Improved form selection
-const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
 
-// instantiation of Section class
-const todoSection = new Section({
-  items: [], // pass initial odos
-  renderer: () => {},
-  // generate todo item
-  // add it to the todo list
-  // Refer to the forEach loop in this file
-  containerSelector: ".todos__list",
+const todoCounter = new TodoCounter(initialTodos, ".counter__text");
+
+function handleCheck(completed) {
+  todoCounter.updateCompleted(completed);
+}
+
+const addTodoPopup = new PopupWithForm({
+  popupSelector: "#add-todo-popup",
+  handleFormSubmit: (inputValues) => {
+    const name = inputValues.name; // Get the task name from the form input
+    const dateInput = inputValues.date;
+
+    // Create a date object and adjust for timezone
+    const date = new Date(dateInput);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+
+    // Generate unique ID for the new todo
+    const id = uuidv4();
+
+    // Create a new todo object
+    const newTodo = { name, date, id, completed: false };
+
+    // Generate a todo element using the Todo class
+    const todoElement = generateTodo(newTodo);
+
+    // Use Section's addItem method to add the new todo to the list
+    todoSection.addItem(todoElement);
+  },
 });
 
-// call section instance`s renderItems method
+addTodoPopup.setEventListeners();
 
-// Function to handle closing the popup with the Escape key
-const handleEscClose = (evt) => {
-  if (evt.key === "Escape") {
-    closeModal(addTodoPopup); // Close the popup when Esc is pressed
-  }
-};
-
-// Function to open the modal and add the keydown event listener
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-  document.addEventListener("keydown", handleEscClose); // Add event listener for Escape key
-};
-
-// Function to close the modal and remove the keydown event listener
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-  document.removeEventListener("keydown", handleEscClose); // Remove event listener for Escape key
-};
-
-// The logic in this function should all be handled in the Todo class.
+// The function to generate a todo element using the Todo class
 const generateTodo = (data) => {
   const todo = new Todo(
     data,
@@ -53,49 +53,30 @@ const generateTodo = (data) => {
       console.log("Delete button clicked");
     }
   );
-  const todoElement = todo.getView();
-  return todoElement;
+  return todo.getView(); // Return the generated todo element
 };
+
+// Instantiate the Section class and pass initial todos and the renderer
+const todoSection = new Section({
+  items: initialTodos, // Pass initial todos
+  renderer: (item) => {
+    const todoElement = generateTodo(item); // Generate todo item
+    todoSection.addItem(todoElement); // Add it to the todo list using addItem
+  },
+  container: ".todos__list",
+});
+
+// Call section instance's renderItems method to render initial todos
+todoSection.renderItems();
 
 // event listener to open the "add todo" popup
 addTodoButton.addEventListener("click", () => {
-  openModal(addTodoPopup);
-});
-
-// event listener to close the popup
-addTodoCloseBtn.addEventListener("click", () => {
-  closeModal(addTodoPopup);
-});
-
-// event listener to handle form submission
-addTodoForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-
-  // Create a date object and adjust for timezone
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const id = uuidv4();
-  const values = { name, date, id };
-
-  const todo = generateTodo(values);
-  todosList.append(todo); // Use add item method
-
-  closeModal(addTodoPopup); // Close the modal after submission
-
-  // Call resetValidation after successful submission
-  newTodoValidator.resetValidation(); // Reset form validation after submission
-});
-
-// Render initial todos // Remove later Use add item method
-initialTodos.forEach((item) => {
-  const todo = generateTodo(item);
-  todosList.append(todo);
+  addTodoPopup.open(); // This will open the popup when the button is clicked
 });
 
 // Enable form validation
-const newTodoValidator = new formValidator(validationConfig, addTodoForm);
+const newTodoValidator = new formValidator(
+  validationConfig,
+  document.forms["add-todo-form"]
+);
 newTodoValidator.enableValidation();
