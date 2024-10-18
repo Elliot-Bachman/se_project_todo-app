@@ -18,6 +18,9 @@ function handleCheck(completed) {
 function handleDelete(completed) {
   // Decrement total tasks and pass the completed status
   todoCounter.updateTotal(false, completed); // Decrement total tasks and completed count if necessary
+  console.log(
+    `Task deleted. Current total: ${todoCounter._total}, Completed: ${todoCounter._completed}`
+  );
 }
 // If no tasks remain, reset the counters
 if (todoCounter._total === 0) {
@@ -48,6 +51,9 @@ const addTodoPopup = new PopupWithForm({
 
     // Update the total number of tasks (increment counter)
     todoCounter.updateTotal(true);
+    console.log(
+      `Task added. Current total: ${todoCounter._total}, Completed: ${todoCounter._completed}`
+    );
   },
 });
 

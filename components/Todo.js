@@ -8,15 +8,17 @@ class Todo {
   }
 
   _setEventListeners() {
+    // When delete is clicked, update the completed and total counters before removing the element
     this._todoDeleteBtn.addEventListener("click", () => {
       this._handleDelete(this._completed);
       this._todoElement.remove();
-      this._handleCheck(this._completed);
     });
 
+    // Only call handleCheck when the checkbox is actually changed
     this._todoCheckboxEl.addEventListener("change", () => {
-      this._data.completed = !this._data.completed; //toggle completed state
-      this._handleCheck(this._data.completed); // call checkbox handler
+      // Ensure the checkbox state is toggled once
+      this._data.completed = !this._data.completed;
+      this._handleCheck(this._data.completed); // Call checkbox handler
     });
   }
 
@@ -29,7 +31,6 @@ class Todo {
     this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");
   }
 
-  // Generate and display the date element
   generateDateEl() {
     this._todoDateEl = this._todoElement.querySelector(".todo__date");
     const dueDate = new Date(this._data.date);
@@ -39,28 +40,22 @@ class Todo {
         month: "short",
         day: "numeric",
       });
-
-      // Set the formatted date in the date element
       this._todoDateEl.textContent = `Due: ${formattedDate}`;
     } else {
-      // If no date, display a default message
       this._todoDateEl.textContent = "No due date set";
     }
   }
 
   getView() {
-    // Clone the todo template and assign to _todoElement
     this._todoElement = this._templateElement.content
       .querySelector(".todo")
       .cloneNode(true);
 
-    // Set the name of the todo item
     const todoNameEl = this._todoElement.querySelector(".todo__name");
     todoNameEl.textContent = this._data.name;
 
     this.generateCheckboxEl();
     this.generateDateEl();
-
     this._setEventListeners();
 
     return this._todoElement;
