@@ -16,15 +16,16 @@ function handleCheck(completed) {
 }
 
 function handleDelete(completed) {
-  // Decrement total tasks and pass the completed status
+  console.log("Task delete requested.");
   todoCounter.updateTotal(false, completed); // Decrement total tasks and completed count if necessary
   console.log(
-    `Task deleted. Current total: ${todoCounter._total}, Completed: ${todoCounter._completed}`
+    `Task deleted. Current total: ${todoCounter.total}, Completed: ${todoCounter.completed}`
   );
 }
+
 // If no tasks remain, reset the counters
-if (todoCounter._total === 0) {
-  todoCounter._completed = 0;
+if (todoCounter.total === 0) {
+  todoCounter.completed = 0;
 }
 
 const addTodoPopup = new PopupWithForm({
@@ -51,8 +52,12 @@ const addTodoPopup = new PopupWithForm({
 
     // Update the total number of tasks (increment counter)
     todoCounter.updateTotal(true);
+
+    // Call resetValidation to clear the input and disable the button
+    newTodoValidator.resetValidation();
+
     console.log(
-      `Task added. Current total: ${todoCounter._total}, Completed: ${todoCounter._completed}`
+      `Task added. Current total: ${todoCounter.total}, Completed: ${todoCounter.completed}`
     );
   },
 });
@@ -88,14 +93,15 @@ const todoSection = new Section({
 // Call section instance's renderItems method to render initial todos
 todoSection.renderItems();
 
+// Use getForm method to access the form element
+const newTodoValidator = new formValidator(
+  validationConfig,
+  addTodoPopup.getForm() // Use getForm method to access the form element
+);
+
+newTodoValidator.enableValidation();
+
 // event listener to open the "add todo" popup
 addTodoButton.addEventListener("click", () => {
   addTodoPopup.open(); // This will open the popup when the button is clicked
 });
-
-// Enable form validation
-const newTodoValidator = new formValidator(
-  validationConfig,
-  document.forms["add-todo-form"]
-);
-newTodoValidator.enableValidation();

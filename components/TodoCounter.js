@@ -1,60 +1,45 @@
 class TodoCounter {
   constructor(todos, selector) {
-    this._element = document.querySelector(selector);
-    this._completed = todos.filter((todo) => todo.completed).length; // Calculate completed todos
-    this._total = todos.length; // Total todos
+    this.element = document.querySelector(selector); // No underscore
+    this.completed = todos.filter((todo) => todo.completed).length; // No underscore
+    this.total = todos.length; // No underscore
     this._updateText();
     console.log(
-      `Initial state: ${this._completed} out of ${this._total} completed`
+      `Initial state: ${this.completed} out of ${this.total} completed`
     );
   }
 
-  // Call this when a checkbox is clicked, and when a completed to-do is deleted.
   updateCompleted(increment) {
-    // Increment or decrement the completed count
-    this._completed += increment ? 1 : -1;
-
-    // Ensure completed count does not go below 0 or exceed total
-    if (this._completed < 0) {
-      this._completed = 0;
+    this.completed += increment ? 1 : -1;
+    if (this.completed < 0) {
+      this.completed = 0;
     }
-    if (this._completed > this._total) {
-      this._completed = this._total;
+    if (this.completed > this.total) {
+      this.completed = this.total;
     }
-
     console.log(
-      `After updateCompleted: ${this._completed} out of ${this._total}`
+      `After updateCompleted: ${this.completed} out of ${this.total}`
     );
     this._updateText();
   }
 
-  // Call this when a to-do is created via the form or deleted
   updateTotal(increment, wasCompleted = false) {
-    // Increment or decrement the total count
-    this._total += increment ? 1 : -1;
-
-    // Ensure total count does not go below 0
-    if (this._total < 0) {
-      this._total = 0;
+    this.total += increment ? 1 : -1;
+    if (this.total < 0) {
+      this.total = 0;
     }
-
-    // If no tasks remain, reset both total and completed counts
-    if (this._total === 0) {
-      this._completed = 0; // Reset completed count when no tasks remain
-    }
-
-    // If a task was completed before being deleted, update the completed count
     if (!increment && wasCompleted) {
       this.updateCompleted(false);
     }
-
-    console.log(`After updateTotal: ${this._completed} out of ${this._total}`);
+    if (this.total === 0) {
+      this.completed = 0;
+    }
+    console.log(`After updateTotal: ${this.completed} out of ${this.total}`);
     this._updateText();
   }
 
-  // Update the text content of the counter
   _updateText() {
-    this._element.textContent = `Showing ${this._completed} out of ${this._total} completed`;
+    this.element.textContent = `Showing ${this.completed} out of ${this.total} completed`;
   }
 }
 

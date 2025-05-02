@@ -1,22 +1,64 @@
 # Simple Todo App
 
-This Todo App allows you to assign tasks, set a due date, and check off tasks as needed. Great for all purpose productivity!
+A straightforward task management application that helps you stay organized and productive.
 
-## Functionality
+## Table of Contents
 
-The appplication allows you to add tasks by simply clicking the +AddTodo button. Once clicked, a modal will propmpt the user to enter the name of the task that needs completing, as well as a date selector for deadlines. All tasks are acceptable so long as the name is between 2 and 40 characters. All dates are acceptabe so long as they do not require time travel to the past or the extended future beyond New Years of 3000 AD. Forgot what you were typing when you exited the modal? No problem! The SimpleToDo App records all inputs that have not been submitted!
+- [Overview](#overview)
+- [Features](#features)
+- [Demo](#demo)
+- [Screenshots](#screenshots)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Deployment](#deployment)
 
-- A todo list tracker was added to show the user how many tasks out of the total number of tasaks remain.10/18/2024.
+## Overview
 
-## Technology
+This Todo App allows you to assign tasks, set a due date, and check off tasks as needed. Great for all-purpose productivity!
 
-HTML- Used for basic structure an markup.
-CSS - Used for styling the modal and buttons.
-Javascript - Used for all matters of app functionality listed above.
-VS Code - The best IDE for web development.
-Github/bash - Used for saving development progress and deployment on GH pages.
-Javascript modules - Used for refactoring existing source code for Object Oriented Programming needs.
-uuid - Used for generating unique IDs since there is no server accompanying this application.
+## Features
+
+- Add new tasks with custom names
+- Set due dates for tasks
+- Mark tasks as complete
+- Delete tasks
+- Progress tracker showing completed vs total tasks
+- Input persistence when modal is closed
+- Character limit (2-40) for task names
+- Date validation (no past dates or dates beyond year 3000)
+
+## Demo
+
+[Watch Demo Video](https://drive.google.com/file/d/1icxVFPryHetExGi0vdnlITOFD7yS2VyX/view?usp=drive_link)
+
+## Screenshots
+
+### Home Screen
+
+![Home Screen](./screenshots/To%20do%20app%20screenshot.gif)
+_Main interface of the Todo App_
+
+### Add Todo Modal
+
+![Add Todo Modal](./screenshots/Add%20new%20Todo.gif)
+_Modal for adding new tasks_
+
+## Technology Stack
+
+- **HTML**: Basic structure and markup
+- **CSS**: Styling for modals and buttons
+- **JavaScript**: Core application functionality
+- **Development Tools**:
+  - VS Code: Primary IDE
+  - GitHub/Bash: Version control and deployment
+  - JavaScript modules: Object-Oriented Programming implementation
+  - UUID: Unique ID generation for tasks
+
+## Installation
+
+1. Clone the repository
+2. Open index.html in your browser
+3. Start managing your tasks!
 
 ## Deployment
 

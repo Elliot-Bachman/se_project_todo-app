@@ -8,6 +8,11 @@ class PopupWithForm extends Popup {
     this._inputList = this._formElement.querySelectorAll(".popup__input"); // Move inputList to constructor
   }
 
+  // Method to return the form element
+  getForm() {
+    return this._formElement;
+  }
+
   // Collect all input values
   _getInputValues() {
     const inputValues = {}; // Fixed typo from Inputvalues to inputValues
